@@ -8,7 +8,6 @@ const covmssg = require('./Guide/covid-message')
 //predefined messages
 const { Help, ErrorCountry } = require('./Guide/guide')
 
-
 const app = express()
 const FB_PAGE_TOKEN = process.env.FB_PAGE_TOKEN
 const HUB_VERIFY_TOKEN = process.env.HUB_VERIFY_TOKEN
@@ -36,7 +35,6 @@ app.post("/webhook", (req,res) => {
   let message_events = req.body.entry[0].messaging
 	message_events.forEach( (entry) => {
     if (entry.message && entry.message.text) {
-      // console.log(`message recieved with id: ${entry.sender.id} and text: ${entry.message.text}`)
       ProcessText(entry.sender.id, entry.message.text)
       res.sendStatus(200);
     }
@@ -103,7 +101,6 @@ const ProcessText = (id, message) => {
 }
 
 const ProcessRequest = (id, data) => {
-  console.log('PROCESSING REQUEST...')
   switch (data.type) {
     case 'query':
       GetCovidInfo(id, data)
@@ -132,7 +129,6 @@ const SendText = (id, text) => {
 const GetCovidInfo = (id, param) => {
   let url = data ? `${NOVELCOVID_API}${param.url}${param.query}` : NOVELCOVID_API
   console.log('URL: ', url)
-  console.log('FETCHING DATA...')
   SendText(id, 'For a moment...')
   request({
     url: url,

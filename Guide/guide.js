@@ -8,7 +8,7 @@ DESCRIPTION:
     report current information
     regarding the COVID19 virus
 
-SOURCES:
+API SOURCES:
     https://corona.lmao.ninja/
     https://covid-19-apis.postman.com/
 
@@ -19,7 +19,7 @@ EXAMPLES:
 AUTHOR:
     keyrwinfelisilda@gmail.com
 
-GITHUB:
+REPO:
     https://github.com/keyrwinz/ncov-chatbot-webhook
 
 COMMANDS:
