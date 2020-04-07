@@ -1,6 +1,6 @@
 module.exports = {
   Help: `
-NCOV Chatbot2020
+NAME: NCOV Chatbot2020
 
 DESCRIPTION:
     This is a chatbot that would 
@@ -22,7 +22,5 @@ COMMANDS:
     ncov
     ncov <country>
   `,
-  Greetings: `Hi there! this is a chatbot for COVID19 virus. Try inputting 'help' for more info.`,
-  ErrorCountry: `Country not found. Try to check the spelling and try again`,
-  ErrorCountryWithoutDash: `Error country name. Try using '-' ex. south korea => 'south-korea'`,
+  ErrorCountry: `Please check your spelling and avoid using dash`,
 }
