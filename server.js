@@ -27,6 +27,8 @@ app.get('/webhook', (req, res) => {
   if (req.query['hub.verify_token'] == HUB_VERIFY_TOKEN) {
     console.log('hub verify success')
     res.status(200).send(req.query['hub.challenge'])
+  } else {
+    res.status(400).send(req)
   }
 })
 
@@ -41,27 +43,46 @@ app.post("/webhook", (req,res) => {
   });
 });
 
+let data = {}
+
 const ProcessText = (id, message) => {
   let str = message.toLowerCase().trim().split(" ").filter(Boolean)
-  let data = {
-    text: null,
-    type: null
-  }
 
   if (str[0] === 'ncov') {
     if (str.length === 1) {
       // get 'all' covid19 cases in the world if user sends 'ncov' only
       data = {
-        text: 'all',
-        type: 'query'
+        query: 'all',
+        type: 'query',
+        url: '/'
       }
     }else {
-      // removing 'ncov' word in string to get the next word/s => (country)
+      // removing 'ncov' word in string to get the next word/s
       str.shift()
-      country = str.join(" ")
-      data = {
-        text: country,
-        type: 'query'
+      if (str[0] === 'yesterday') {
+        // removing 'yesterday' word in string to get the next word/s => (country)
+        str.shift()
+        if (!str[0]) {
+          data = {
+            text: `Please input country. Type 'help' for more info 🙂`,
+            type: 'text'
+          }
+        } else {
+          country = str.join(" ")
+          data = {
+            query: country,
+            type: 'query',
+            url: '/yesterday/',
+            text: `yesterday`
+          }
+        }
+      } else {
+        country = str.join(" ")
+        data = {
+          query: country,
+          type: 'query',
+          url: '/countries/'
+        }
       }
     }
   } else if (str[0] === 'help') {
@@ -71,7 +92,7 @@ const ProcessText = (id, message) => {
     }
   } else {
     data = {
-      text: `Hi there! try typing 'help' to show documentation`,
+      text: `Hi there 👋! try typing 'help' to show documentation 😊`,
       type: 'text'
     }
   }
@@ -85,19 +106,18 @@ const ProcessRequest = (id, data) => {
   console.log('PROCESSING REQUEST...')
   switch (data.type) {
     case 'query':
-      console.log('it is a query')
-      GetCovidInfo(id, data.text)
+      GetCovidInfo(id, data)
       break;
     case 'text':
-      console.log('it is just a text')
       SendText(id, data.text)
     default:
       break;
   }
+
+  data = {}
 }
 
 const SendText = (id, text) => {
-  console.log('SENDING TEXT... \n\n\n')
   request({
     url: MESSENGER_API,
     qs: { access_token: FB_PAGE_TOKEN },
@@ -109,17 +129,18 @@ const SendText = (id, text) => {
   })
 }
 
-const GetCovidInfo = (id, query) => {
-  SendText(id, 'For a moment...')
-  let url = query === 'all' ? `${NOVELCOVID_API}/${query}` : `${NOVELCOVID_API}/countries/${query}`
+const GetCovidInfo = (id, param) => {
+  let url = data ? `${NOVELCOVID_API}${param.url}${param.query}` : NOVELCOVID_API
   console.log('URL: ', url)
+  console.log('FETCHING DATA...')
+  SendText(id, 'For a moment...')
   request({
     url: url,
     json: true
   }, (err, res, data) => {
     let message
     if(!err && res.statusCode === 200){
-      message = covmssg.generateMessage(data)
+      message = covmssg.generateMessage(data, param.text)
     }else{
       console.log('Error: ', res.statusCode)
       message = `${data.message}. ${ErrorCountry}`
