@@ -128,7 +128,7 @@ const SendText = (id, text) => {
 }
 
 const GetCovidInfo = (id, param) => {
-  let url = data ? `${NOVELCOVID_API}${param.url}${param.query}` : NOVELCOVID_API
+  let url = param ? `${NOVELCOVID_API}${param.url}${param.query}` : NOVELCOVID_API
   request({
     url: url,
     json: true
