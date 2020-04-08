@@ -2,6 +2,8 @@ const moment = require('moment')
 const numeral = require('numeral')
 const emojiFlags = require('emoji-flags')
 
+const timezone = 'Asia/Manila'
+
 const generateMessage = (data, text = 'today') => {
   let { 
     country,
@@ -22,9 +24,9 @@ const generateMessage = (data, text = 'today') => {
 
   const flag = country ? countryInfo.iso2 ? emojiFlags.countryCode(countryInfo.iso2).emoji : '🌎' : '🌎' 
   const message = `
-As of ${moment(updated).local().format('LLLL')}
+As of ${moment(updated).tz(timezone).format('llll Z')}
 in ${country ? country : 'the World'} ${flag}
-Updated ${moment(updated).local().fromNow()}
+Updated ${moment(updated).tz(timezone).fromNow()}
 
 Total cases ${text}: ${numeral(cases).format(0,0)} ${cases > 0 ? '😔' : '😊'}
 with ${text}'s new cases: ${numeral(todayCases).format(0,0)} ${todayCases > 0 ? '😣' : '✅'}
