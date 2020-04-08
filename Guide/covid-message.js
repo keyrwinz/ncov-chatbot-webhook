@@ -1,4 +1,4 @@
-const moment = require('moment')
+const moment = require('moment-timezone')
 const numeral = require('numeral')
 const emojiFlags = require('emoji-flags')
 
