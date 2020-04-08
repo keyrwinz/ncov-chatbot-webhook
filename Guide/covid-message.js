@@ -28,15 +28,15 @@ As of ${moment(updated).tz(timezone).format('llll Z')}
 in ${country ? country : 'the World'} ${flag}
 Updated ${moment(updated).tz(timezone).fromNow()}
 
-Total cases ${text}: ${numeral(cases).format(0,0)} ${cases > 0 ? '😔' : '😊'}
-with ${text}'s new cases: ${numeral(todayCases).format(0,0)} ${todayCases > 0 ? '😣' : '✅'}
+Total cases ${text}: ${numeral(cases).format(0,0)}
+with ${text}'s new cases: ${numeral(todayCases).format(0,0)}
 
-Total Recovered: ${numeral(recovered).format(0,0)} 🥰
-Total Deaths: ${numeral(deaths).format(0,0)} ${deaths > 0 ? '😥' : '✅'}
-with ${text}'s new deaths: ${numeral(todayDeaths).format(0,0)} ${todayDeaths > 0 ? '😭' : '✅'}
+Total Recovered: ${numeral(recovered).format(0,0)}
+Total Deaths: ${numeral(deaths).format(0,0)}
+with ${text}'s new deaths: ${numeral(todayDeaths).format(0,0)}
 
-Active ${text}: ${numeral(active).format(0,0)} 😷
-Total tests ${text}: ${numeral(tests).format(0,0)} 🏨
+Active ${text}: ${numeral(active).format(0,0)}
+Total tests ${text}: ${numeral(tests).format(0,0)}
 
 ${affectedCountries ? `Affected countries: ${affectedCountries}` : ''}
 `

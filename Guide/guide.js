@@ -22,10 +22,6 @@ EXAMPLES:
 AUTHOR:
     keyrwinfelisilda@gmail.com
 
-REPO:
-    https://github.com/keyrwinz/ncov-chatbot-webhook
-    'Feel free to contribute 😊'
-
 COMMANDS:
     help
     ncov
