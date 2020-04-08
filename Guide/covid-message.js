@@ -22,9 +22,9 @@ const generateMessage = (data, text = 'today') => {
 
   const flag = country ? countryInfo.iso2 ? emojiFlags.countryCode(countryInfo.iso2).emoji : '🌎' : '🌎' 
   const message = `
-As of ${moment(updated).format('LLLL')}
+As of ${moment(updated).local().format('LLLL')}
 in ${country ? country : 'the World'} ${flag}
-Updated ${moment(updated).fromNow()}
+Updated ${moment(updated).local().fromNow()}
 
 Total cases ${text}: ${numeral(cases).format(0,0)} ${cases > 0 ? '😔' : '😊'}
 with ${text}'s new cases: ${numeral(todayCases).format(0,0)} ${todayCases > 0 ? '😣' : '✅'}
