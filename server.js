@@ -137,13 +137,10 @@ const GetCovidInfo = (id, param) => {
     if(!err && res.statusCode === 200){
       message = covmssg.generateMessage(data, param.text)
     }else{
-      console.log('Error: ', res.statusCode)
+      console.log('Error: ', data.message)
       message = `${data.message}. ${ErrorCountry}`
     }
 
     SendText(id, message)
   })
 }
-
-
-
