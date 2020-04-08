@@ -27,7 +27,8 @@ app.get('/webhook', (req, res) => {
     console.log('hub verify success')
     res.status(200).send(req.query['hub.challenge'])
   } else {
-    res.status(400).send(req)
+    console.log(req.query['hub.verify_token'])
+    res.status(400)
   }
 })
 
@@ -95,8 +96,8 @@ const ProcessText = (id, message) => {
     }
   }
   
-  console.log('STR: ', str)
-  console.log('DATA: ', data)
+  // console.log('STR: ', str)
+  // console.log('DATA: ', data)
   ProcessRequest(id, data)
 }
 
@@ -128,8 +129,6 @@ const SendText = (id, text) => {
 
 const GetCovidInfo = (id, param) => {
   let url = data ? `${NOVELCOVID_API}${param.url}${param.query}` : NOVELCOVID_API
-  console.log('URL: ', url)
-  SendText(id, 'For a moment...')
   request({
     url: url,
     json: true
