@@ -31,7 +31,7 @@ app.get('/', (req, res) => res.send('THIS IS NCOV CHATBOT'))
 app.get('/webhook', (req, res) => {
   if (req.query['hub.verify_token'] == HUB_VERIFY_TOKEN) {
     console.log('hub verify success')
-    setupGetStartedButton(res)
+    SetupGetStartedButton(res)
     res.status(200).send(req.query['hub.challenge'])
   } else {
     console.log(req.query['hub.verify_token'])
