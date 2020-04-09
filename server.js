@@ -5,8 +5,14 @@ const dotenv = require('dotenv');
 dotenv.config();
 const covmssg = require('./Guide/covid-message')
 
-//predefined messages
-const { Help, ErrorCountry } = require('./Guide/guide')
+const { 
+  WelcomeMessage, 
+  Help, 
+  AppInfo, 
+  ErrorCountry, 
+  MessageForAttachments, 
+  DefaultMessage,
+  ErrorYesterdayQuery } = require('./Guide/guide')
 
 const app = express()
 const FB_PAGE_TOKEN = process.env.FB_PAGE_TOKEN
@@ -25,6 +31,7 @@ app.get('/', (req, res) => res.send('THIS IS NCOV CHATBOT'))
 app.get('/webhook', (req, res) => {
   if (req.query['hub.verify_token'] == HUB_VERIFY_TOKEN) {
     console.log('hub verify success')
+    setupGetStartedButton(res)
     res.status(200).send(req.query['hub.challenge'])
   } else {
     console.log(req.query['hub.verify_token'])
@@ -36,8 +43,18 @@ app.post("/webhook", (req,res) => {
   let message_events = req.body.entry[0].messaging
 	message_events.forEach( (entry) => {
     if (entry.message && entry.message.text) {
-      ProcessText(entry.sender.id, entry.message.text)
-      res.sendStatus(200);
+        ProcessText(entry.sender.id, entry.message.text)
+        res.sendStatus(200);
+    } else {
+      if ( entry.postback && entry.postback.payload === 'get_started' ){
+        GreetUser(entry.sender.id)
+        res.sendStatus(200)
+      } else if (entry.message.attachments) {
+        SendText(entry.sender.id, MessageForAttachments)
+        res.sendStatus(200)
+      } else {
+        res.sendStatus(400)
+      }
     }
   });
 });
@@ -63,7 +80,7 @@ const ProcessText = (id, message) => {
         str.shift()
         if (!str[0]) {
           data = {
-            text: `Please input country. Type 'help' for more info 🙂`,
+            text: ErrorYesterdayQuery,
             type: 'text'
           }
         } else {
@@ -89,9 +106,14 @@ const ProcessText = (id, message) => {
       text: Help,
       type: 'text'
     }
+  } else if (str[0] === 'info') {
+    data = {
+      text: AppInfo,
+      type: 'text'
+    }
   } else {
     data = {
-      text: `Hi there 👋! try typing 'help' to show documentation 😊`,
+      text: DefaultMessage,
       type: 'text'
     }
   }
@@ -142,5 +164,38 @@ const GetCovidInfo = (id, param) => {
     }
 
     SendText(id, message)
+  })
+}
+
+const GreetUser = (id) => {
+  let url = `https://graph.facebook.com/v2.6/${id}?fields=first_name&access_token=${FB_PAGE_TOKEN}`
+  request({
+    url: url,
+    json: true
+  }, (err, res, data) => {
+    let username
+    if(!err && res.statusCode === 200){
+      username = data.first_name
+    }else{
+      console.log('Error: ', data.message)
+    }
+
+    SendText(id, WelcomeMessage(username))
+  })
+}
+
+const SetupGetStartedButton = (res) => {
+  request({
+    url: `https://graph.facebook.com/v2.6/102461474758839/thread_settings?access_token=${FB_PAGE_TOKEN}`,
+    method: 'POST',
+    json:{
+      "setting_type": "call_to_actions",
+      "thread_state":"new_thread",
+      "call_to_actions": [{ "payload":"get_started" }]
+    }
+  }, function(error, response, body) {
+      if (error) {
+        console.log('Error sending messages: ', error)
+      }
   })
 }
