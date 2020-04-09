@@ -24,18 +24,15 @@ to show available commands 🙂
 `,
   AppInfo: `
 NAME: 
-    SCOVIDo bot
+    SCOVIDo Chatbot
 
 DESCRIPTION:
     This is a simple chatbot that would report updated information regarding the COVID-19 virus cases.
-    This app relies on 'NovelCOVID API' to access real-time critical data. We encourage you to seek more informations on other sources. 
-    Type 'info' to show app information and other available sources.
+    This app relies on 'NovelCOVID API' to access real-time critical data. We encourage you to seek more informations on other sources.
 
-API SOURCES:
+APP SOURCES:
     https://corona.lmao.ninja/
     https://covid-19-apis.postman.com/
-
-OTHER SOURCES:
     https://www.worldometers.info/coronavirus/
 
 REPO: Please go to 'about' section on this page
