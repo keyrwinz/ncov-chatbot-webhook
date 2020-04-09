@@ -15,6 +15,7 @@ const {
   ErrorYesterdayQuery } = require('./Guide/guide')
 
 const app = express()
+const FB_PAGE_ID = process.env.FB_PAGE_ID
 const FB_PAGE_TOKEN = process.env.FB_PAGE_TOKEN
 const HUB_VERIFY_TOKEN = process.env.HUB_VERIFY_TOKEN
 const MESSENGER_API = 'https://graph.facebook.com/v6.0/me/messages'
@@ -186,7 +187,7 @@ const GreetUser = (id) => {
 
 const SetupGetStartedButton = (res) => {
   request({
-    url: `https://graph.facebook.com/v2.6/102461474758839/thread_settings?access_token=${FB_PAGE_TOKEN}`,
+    url: `https://graph.facebook.com/v2.6/${FB_PAGE_ID}/thread_settings?access_token=${FB_PAGE_TOKEN}`,
     method: 'POST',
     json:{
       "setting_type": "call_to_actions",
