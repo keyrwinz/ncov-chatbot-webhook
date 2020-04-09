@@ -15,7 +15,7 @@ COMMANDS:
     ncov yesterday <country>
   `,
   WelcomeMessage: (name) => `
-Hello ${name}!
+Hello ${name || 'There'}!
 
 I’m SCOVIDo, short for StopCOVID. I am a simple chatbot 
 made for you to report regarding the current cases and 
@@ -28,12 +28,12 @@ NAME:
 
 DESCRIPTION:
     This is a simple chatbot that would report updated information regarding the COVID-19 virus cases.
-    This app relies on 'NovelCOVID API' to access real-time critical data. We encourage you to seek more informations on other sources.
+    This app relies on 'NovelCOVID API' to access real-time critical data.
 
-APP SOURCES:
+SOURCES:
+    https://www.worldometers.info/coronavirus/
     https://corona.lmao.ninja/
     https://covid-19-apis.postman.com/
-    https://www.worldometers.info/coronavirus/
 
 REPO: Please go to 'about' section on this page
   `,
