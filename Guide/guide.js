@@ -32,8 +32,6 @@ SOURCES:
     https://www.worldometers.info/coronavirus/
     https://corona.lmao.ninja/
     https://covid-19-apis.postman.com/
-
-REPO: Please go to 'about' section on this page
   `,
   ErrorCountry: `Please check your spelling and avoid using dash`,
   ErrorYesterdayQuery: `Please input country. Type 'help' for more info 🙂`,
