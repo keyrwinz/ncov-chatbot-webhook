@@ -17,10 +17,8 @@ COMMANDS:
   WelcomeMessage: (name) => `
 Hello ${name || 'There'}!
 
-I’m SCOVIDo, short for StopCOVID. I am a simple chatbot 
-made for you to report regarding the current cases and 
-more stuff about COVID-19! To begin with, type 'help' 
-to show available commands 🙂
+I’m SCOVIDo, short for StopCOVID. I am a simple chatbot made for you to report regarding the current cases and more stuff about COVID-19! 
+To begin with, type 'help' to show available commands 🙂
 `,
   AppInfo: `
 NAME: 
