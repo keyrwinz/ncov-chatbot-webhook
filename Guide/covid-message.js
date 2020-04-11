@@ -4,7 +4,7 @@ const emojiFlags = require('emoji-flags')
 
 const timezone = 'Asia/Manila'
 
-const generateMessage = (data, text = 'today') => {
+const generateMessage = (data, text = 'TODAY') => {
   let { 
     country,
     countryInfo,
@@ -23,30 +23,59 @@ const generateMessage = (data, text = 'today') => {
     casesPerOneMillion
   } = data
 
-  const casesPercentage = cases / tests
-  const deathPercentage = deaths / tests
-  const recovPercentage = recovered / tests
-
+  const updatedDate = moment(updated).tz(timezone).format('llll Z')
+  const countryName = country ? country === 'World' ? `the ${country}` : country : 'the World'
   const flag = country ? countryInfo.iso2 ? emojiFlags.countryCode(countryInfo.iso2).emoji : '🌎' : '🌎' 
+  const relativeTime = moment(updated).tz(timezone).fromNow()
+
+  const testsVal = tests ? numeral(tests).format('0,0') : 'No data'
+  const casesVal = numeral(cases).format('0,0')
+  const todayCasesVal = numeral(todayCases).format('0,0')
+  const deathsVal = numeral(deaths).format('0,0')
+  const todayDeathsVal = numeral(todayDeaths).format('0,0')
+  const recoveredVal = numeral(recovered).format('0,0')
+  const activeVal = numeral(active).format('0,0')
+  const criticalVal = numeral(critical).format(0, 0)
+  const affectedCountriesVal = affectedCountries ? `Affected countries: ${affectedCountries}` : ''
+
+  const caseRatio = cases/tests
+  const deathRatio = deaths/tests
+  const recovRatio = recovered/tests
+
+  const casePercentage = caseRatio ? numeral(caseRatio).format('0.00%') : ''
+  const deathPercentage = deathRatio ? numeral(deathRatio).format('0.00%') : ''
+  const recovPercentage = recovRatio ? numeral(recovRatio).format('0.00%') : ''
+
+  const caseW = cases > 1 ? 'cases' : 'case'
+  const tcaseW = todayCases > 1 ? 'cases' : 'case'
+  const deathW = deaths > 1 ? 'deaths' : 'death'
+  const tdeathW = todayDeaths > 1 ? 'deaths' : 'death'
+
+
   const message = `
-As of ${moment(updated).tz(timezone).format('llll Z')}
-in ${country ? country === 'World' ? `the ${country}` : country : 'the World'} ${flag}
-Updated ${moment(updated).tz(timezone).fromNow()}
+${text === 'TODAY' ? `
+Data as of ${updatedDate}
+in ${countryName} ${flag}
+Updated ${relativeTime}
+` : `
+${text}
+in ${countryName} ${flag}
+`}
 
-Total tests ${text}: ${numeral(tests).format(0,0)}
+Total tests ${text}: ${testsVal}
 
-Total cases ${text}: ${numeral(cases).format(0,0)} (${numeral(casesPercentage).format('0.00%')})
-with ${text}'s new cases: ${numeral(todayCases).format(0,0)}
+Total ${caseW} ${text}: ${casesVal} ${casePercentage}
+New ${tcaseW}: ${todayCasesVal}
 
-Total Deaths: ${numeral(deaths).format(0,0)} (${numeral(deathPercentage).format('0.00%')})
-with ${text}'s new deaths: ${numeral(todayDeaths).format(0,0)}
+Total ${deathW}: ${deathsVal} ${deathPercentage}
+New ${tdeathW}: ${todayDeathsVal}
 
-Total Recovered: ${numeral(recovered).format(0,0)} (${numeral(recovPercentage).format('0.00%')})
+Total recovered: ${recoveredVal} ${recovPercentage}
 
-Active ${text}: ${numeral(active).format(0,0)}
-Critical: ${numeral(critical).format(0, 0)}
+Active ${text}: ${activeVal}
+Critical: ${criticalVal}
 
-${affectedCountries ? `Affected countries: ${affectedCountries}` : ''}
+${affectedCountriesVal}
 `
   return message
 }
