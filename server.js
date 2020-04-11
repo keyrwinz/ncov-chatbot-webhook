@@ -94,7 +94,7 @@ const ProcessText = (id, message) => {
               query: country,
               type: 'query',
               url: '/yesterday/',
-              text: `YESTERDAY`
+              text: `yesterday`
             }
           }
         } else {

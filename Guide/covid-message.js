@@ -4,7 +4,7 @@ const emojiFlags = require('emoji-flags')
 
 const timezone = 'Asia/Manila'
 
-const generateMessage = (data, text = 'TODAY') => {
+const generateMessage = (data, text = 'today') => {
   let { 
     country,
     countryInfo,
@@ -42,9 +42,9 @@ const generateMessage = (data, text = 'TODAY') => {
   const deathRatio = deaths/tests
   const recovRatio = recovered/tests
 
-  const casePercentage = caseRatio ? numeral(caseRatio).format('0.00%') : ''
-  const deathPercentage = deathRatio ? numeral(deathRatio).format('0.00%') : ''
-  const recovPercentage = recovRatio ? numeral(recovRatio).format('0.00%') : ''
+  const casePercentage = isFinite(caseRatio) ? `(${numeral(caseRatio).format('0.00%')})` : ''
+  const deathPercentage = isFinite(deathRatio) ? `(${numeral(deathRatio).format('0.00%')})` : ''
+  const recovPercentage = isFinite(recovRatio) ? `(${numeral(recovRatio).format('0.00%')})` : ''
 
   const caseW = cases > 1 ? 'cases' : 'case'
   const tcaseW = todayCases > 1 ? 'cases' : 'case'
@@ -53,15 +53,14 @@ const generateMessage = (data, text = 'TODAY') => {
 
 
   const message = `
-${text === 'TODAY' ? `
-Data as of ${updatedDate}
+${text === 'today' ? `
+As of ${updatedDate}
 in ${countryName} ${flag}
 Updated ${relativeTime}
 ` : `
 ${text}
 in ${countryName} ${flag}
 `}
-
 Total tests ${text}: ${testsVal}
 
 Total ${caseW} ${text}: ${casesVal} ${casePercentage}
