@@ -12,7 +12,8 @@ const {
   ErrorCountry, 
   MessageForAttachments, 
   DefaultMessage,
-  ErrorYesterdayQuery } = require('./Guide/guide')
+  ErrorYesterdayQuery,
+  Contributors } = require('./Guide/guide')
 
 const app = express()
 const FB_PAGE_ID = process.env.FB_PAGE_ID
@@ -65,58 +66,76 @@ let data = {}
 const ProcessText = (id, message) => {
   let str = message.toLowerCase().trim().split(" ").filter(Boolean)
 
-  if (str[0] === 'ncov') {
-    if (str.length === 1) {
-      // get 'all' covid19 cases in the world if user sends 'ncov' only
-      data = {
-        query: 'all',
-        type: 'query',
-        url: '/'
-      }
-    }else {
-      // removing 'ncov' word in string to get the next word/s
-      str.shift()
-      if (str[0] === 'yesterday') {
-        // removing 'yesterday' word in string to get the next word/s => (country)
+  switch (str[0]) {
+    case 'ncov':
+      if (str.length === 1) {
+        // get 'all' covid19 cases in the world if user sends 'ncov' only
+        data = {
+          query: 'all',
+          type: 'query',
+          url: '/'
+        }
+      } else {
+        // removing 'ncov' word in string to get the next word/s
         str.shift()
-        if (!str[0]) {
-          data = {
-            text: ErrorYesterdayQuery,
-            type: 'text'
+
+        if (str[0] === 'yesterday') {
+          // removing 'yesterday' word in string to get the next word/s => (country)
+          str.shift()
+          if (!str[0] || str[0] === '') {
+            data = {
+              text: ErrorYesterdayQuery,
+              type: 'text'
+            }
+          } else {
+            // get yesterday's cases
+            country = str.join(" ")
+            data = {
+              query: country,
+              type: 'query',
+              url: '/yesterday/',
+              text: `yesterday`
+            }
           }
         } else {
+          // get today's cases
           country = str.join(" ")
           data = {
             query: country,
             type: 'query',
-            url: '/yesterday/',
-            text: `yesterday`
+            url: '/countries/'
           }
         }
-      } else {
-        country = str.join(" ")
-        data = {
-          query: country,
-          type: 'query',
-          url: '/countries/'
-        }
       }
-    }
-  } else if (str[0] === 'help') {
-    data = {
-      text: Help,
-      type: 'text'
-    }
-  } else if (str[0] === 'info') {
-    data = {
-      text: AppInfo,
-      type: 'text'
-    }
-  } else {
-    data = {
-      text: DefaultMessage,
-      type: 'text'
-    }
+      break;
+    
+    case 'help': 
+      data = {
+        text: Help,
+        type: 'text'
+      }
+      break;
+    
+    case 'info': 
+      data = {
+        text: AppInfo,
+        type: 'text'
+      }
+      break;
+
+    case 'contributors':
+      data = {
+        text: Contributors,
+        type: 'text'
+      }
+      break
+
+    default:
+      data = {
+        text: DefaultMessage,
+        type: 'text'
+      }
+      break;
   }
   
   // console.log('STR: ', str)

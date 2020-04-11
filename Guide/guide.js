@@ -1,18 +1,18 @@
 module.exports = {
   Help: `
 EXAMPLES:
-    'ncov' => #shows world cases summary
+    'ncov' => shows World cases
 
-    'ncov philippines' => #shows cases in the PH
+    'ncov ph' => shows Philippines cases
 
-    'ncov yesterday ph' => #shows yesterday's cases in the Philippines'
+    'ncov yesterday sg' => shows yesterday's cases in singapore'
 
 COMMANDS:
     help
     info
     ncov
-    ncov <country>
-    ncov yesterday <country>
+    ncov [country name]
+    ncov yesterday [country name]
   `,
   WelcomeMessage: (name) => `
 Hello ${name || 'There'}!
@@ -30,11 +30,15 @@ DESCRIPTION:
 
 SOURCES:
     https://www.worldometers.info/coronavirus/
-    https://corona.lmao.ninja/
-    https://covid-19-apis.postman.com/
   `,
   ErrorCountry: `Please check your spelling and avoid using dash`,
   ErrorYesterdayQuery: `Please input country. Type 'help' for more info 🙂`,
-  MessageForAttachments: `Hi there 👋.. just to let you know you don't need to send attachments to use this app 😊`,
+  MessageForAttachments: `Hi there 👋.. just to let you know you don't need to send attachments to use this bot 😊`,
+  Contributors: `
+Contributors:
+    Keyrwin Felisilda
+    Kevin Felisilda
+    Hanny Peñarubia
+  `,
   DefaultMessage: `Hi there 👋! try typing 'help' to show documentation 😊`,
 }
