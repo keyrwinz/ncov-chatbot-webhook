@@ -4,7 +4,7 @@ const emojiFlags = require('emoji-flags')
 
 const timezone = 'Asia/Manila'
 
-const generateMessage = (data, text = 'today') => {
+const generateMessage = (data, text = 'Today') => {
   let { 
     country,
     countryInfo,
@@ -53,26 +53,23 @@ const generateMessage = (data, text = 'today') => {
 
 
   const message = `
-${text === 'today' ? `
+${text === 'Today' ? `
 As of ${updatedDate}
 in ${countryName} ${flag}
 Updated ${relativeTime}
 ` : `
-${text}
-in ${countryName} ${flag}
+${text} in ${countryName} ${flag}
 `}
-Total tests ${text}: ${testsVal}
-
-Total ${caseW} ${text}: ${casesVal} ${casePercentage}
+Total ${caseW}: ${casesVal} ${casePercentage}
 New ${tcaseW}: ${todayCasesVal}
 
 Total ${deathW}: ${deathsVal} ${deathPercentage}
 New ${tdeathW}: ${todayDeathsVal}
 
 Total recovered: ${recoveredVal} ${recovPercentage}
-
-Active ${text}: ${activeVal}
-Critical: ${criticalVal}
+Active cases: ${activeVal}
+Serious,Critical: ${criticalVal}
+Total tests: ${testsVal}
 
 ${affectedCountriesVal}
 `
