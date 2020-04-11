@@ -41,30 +41,22 @@ const generateMessage = (data, text = 'Today') => {
   const caseRatio = cases/tests
   const deathRatio = deaths/tests
   const recovRatio = recovered/tests
-
   const casePercentage = isFinite(caseRatio) ? `(${numeral(caseRatio).format('0.00%')})` : ''
   const deathPercentage = isFinite(deathRatio) ? `(${numeral(deathRatio).format('0.00%')})` : ''
   const recovPercentage = isFinite(recovRatio) ? `(${numeral(recovRatio).format('0.00%')})` : ''
 
-  const caseW = cases > 1 ? 'cases' : 'case'
-  const tcaseW = todayCases > 1 ? 'cases' : 'case'
-  const deathW = deaths > 1 ? 'deaths' : 'death'
-  const tdeathW = todayDeaths > 1 ? 'deaths' : 'death'
-
-
   const message = `
 ${text === 'Today' ? `
 As of ${updatedDate}
-in ${countryName} ${flag}
-Updated ${relativeTime}
+in ${countryName} ${flag} updated ${relativeTime}
 ` : `
 ${text} in ${countryName} ${flag}
 `}
-Total ${caseW}: ${casesVal} ${casePercentage}
-New ${tcaseW}: ${todayCasesVal}
+Total cases: ${casesVal} ${casePercentage}
+New cases: ${todayCasesVal}
 
-Total ${deathW}: ${deathsVal} ${deathPercentage}
-New ${tdeathW}: ${todayDeathsVal}
+Total deaths: ${deathsVal} ${deathPercentage}
+New deaths: ${todayDeathsVal}
 
 Total recovered: ${recoveredVal} ${recovPercentage}
 Active cases: ${activeVal}
