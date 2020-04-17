@@ -103,7 +103,8 @@ const ProcessText = (id, message) => {
           data = {
             query: country,
             type: 'query',
-            url: '/countries/'
+            url: '/countries/',
+            text: 'Today'
           }
         }
       }
@@ -170,9 +171,15 @@ const SendText = (id, text) => {
 }
 
 const GetCovidInfo = (id, param) => {
-  let url = param ? `${NOVELCOVID_API}${param.url}${param.query}` : `${NOVELCOVID_API}/all`
-  if (param.text && param.text === 'Yesterday') {
-    url = `${NOVELCOVID_API}${param.url}${param.query}?yesterday=true&strict=false`
+  let url
+  if (param) {
+    url = `${NOVELCOVID_API}/all`
+    if (param.text && param.text === 'Yesterday') {
+      url = `${NOVELCOVID_API}${param.url}${param.query}?yesterday=true&strict=false`
+    }
+    if (param.text && param.text === 'Today') {
+      url = `${NOVELCOVID_API}${param.url}${param.query}?yesterday=false&strict=false`
+    }
   }
   request({
     url: url,
