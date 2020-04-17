@@ -20,7 +20,7 @@ const FB_PAGE_ID = process.env.FB_PAGE_ID
 const FB_PAGE_TOKEN = process.env.FB_PAGE_TOKEN
 const HUB_VERIFY_TOKEN = process.env.HUB_VERIFY_TOKEN
 const MESSENGER_API = 'https://graph.facebook.com/v6.0/me/messages'
-const NOVELCOVID_API = 'https://corona.lmao.ninja'
+const NOVELCOVID_API = 'https://corona.lmao.ninja/v2'
 
 const PORT = process.env.PORT || 8080
 
@@ -93,8 +93,8 @@ const ProcessText = (id, message) => {
             data = {
               query: country,
               type: 'query',
-              url: '/yesterday/',
-              text: `Yesterday`
+              url: '/countries/',
+              text: 'Yesterday'
             }
           }
         } else {
@@ -170,7 +170,10 @@ const SendText = (id, text) => {
 }
 
 const GetCovidInfo = (id, param) => {
-  let url = param ? `${NOVELCOVID_API}${param.url}${param.query}` : NOVELCOVID_API
+  let url = param ? `${NOVELCOVID_API}${param.url}${param.query}` : `${NOVELCOVID_API}/all`
+  if (param.text && param.text === 'Yesterday') {
+    url = `${NOVELCOVID_API}${param.url}${param.query}?yesterday=true&strict=false`
+  }
   request({
     url: url,
     json: true
