@@ -1,9 +1,24 @@
 const express = require('express')
 const request = require('request')
+const multer  = require('multer')
 const bodyparser = require('body-parser')
 const dotenv = require('dotenv');
 dotenv.config();
 const covmssg = require('./Guide/covid-message')
+
+const storage = multer.diskStorage({
+  destination: './uploads/',
+  filename: function (req, file, cb) {
+    cb(null, file.originalname)
+  }
+})
+
+var upload = multer({ storage: storage })
+const app = express()
+const PORT = process.env.PORT || 8080
+app.use(bodyparser.urlencoded({ extended: false }))
+app.use(bodyparser.json())
+app.listen(PORT, () => console.log(`Listening on port ${PORT}`))
 
 const { 
   WelcomeMessage, 
@@ -15,20 +30,39 @@ const {
   ErrorYesterdayQuery,
   Contributors } = require('./Guide/guide')
 
-const app = express()
 const FB_PAGE_ID = process.env.FB_PAGE_ID
 const FB_PAGE_TOKEN = process.env.FB_PAGE_TOKEN
 const HUB_VERIFY_TOKEN = process.env.HUB_VERIFY_TOKEN
 const MESSENGER_API = 'https://graph.facebook.com/v6.0/me/messages'
 const NOVELCOVID_API = 'https://corona.lmao.ninja/v2'
 
-const PORT = process.env.PORT || 8080
 
-app.use(bodyparser.urlencoded({ extended: false }))
-app.use(bodyparser.json())
-app.listen(PORT, () => console.log(`Listening on port ${PORT}`))
+const NCOV_DATA = require('./uploads/ncovph.json')
 
 app.get('/', (req, res) => res.send('THIS IS NCOV CHATBOT'))
+
+app.get('/api', (req, res) => {
+  if (NCOV_DATA) {
+    return res.status(200).send({
+      data: NCOV_DATA,
+      message: 'Successs'
+    })
+  }
+  res.status(500)
+})
+
+app.get('/upload', (req, res) => {
+  res.sendFile(__dirname + '/index.html');
+})
+
+
+app.post('/ncovdata', upload.single('ncovdata'), (req, res) => {
+  const file = req.file
+  if (!file) {
+    return res.status(400).send('No file detected')
+  }
+  res.status(200).send('File uploaded successfully!')
+})
 
 app.get('/webhook', (req, res) => {
   if (req.query['hub.verify_token'] == HUB_VERIFY_TOKEN) {
