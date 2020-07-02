@@ -24,11 +24,14 @@ const NOVELCOVID_API = 'https://corona.lmao.ninja/v2'
 
 const PORT = process.env.PORT || 8080
 
+app.use(express.static('public'))
 app.use(bodyparser.urlencoded({ extended: false }))
 app.use(bodyparser.json())
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`))
 
-app.get('/', (req, res) => res.send('THIS IS NCOV CHATBOT'))
+app.get('/', (req, res) => {
+  res.sendFile('views/index.html', {root: __dirname })
+});
 
 app.get('/webhook', (req, res) => {
   if (req.query['hub.verify_token'] == HUB_VERIFY_TOKEN) {
